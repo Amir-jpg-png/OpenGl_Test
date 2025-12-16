@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+echo setting up make file using cmake...
+
+cmake -B .
+
+cd cmake-build*
+
+echo Compiling and executing gl code...
+
+make
+
+./OpenGL
