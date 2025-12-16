@@ -9,7 +9,7 @@
 .idea
 .DS_Store
 .cache
-cmake*
+cmake*/
 CMakeFiles
 CMakeCache.txt
 compile_commands.json
