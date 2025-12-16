@@ -15,3 +15,4 @@ CMakeCache.txt
 compile_commands.json
 Makefile
 OpenGL
+cmake_install.cmake
