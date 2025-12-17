@@ -1,30 +1,14 @@
 cmake_minimum_required(VERSION 3.20)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(OpenGLTest)
-
 set(CMAKE_CXX_STANDARD 17)
 
 # -----------------------------
-# GLFW
+# required libraries
 # -----------------------------
-if (EXISTS "/opt/homebrew/lib/libglfw.3.dylib")
-    set(GLFW3_INCLUDE_DIR "/opt/homebrew/include")
-    set(GLFW3_LIBRARY "/opt/homebrew/lib/libglfw.3.dylib")
-elseif (EXISTS "/usr/local/lib/libglfw.3.dylib")
-    set(GLFW3_INCLUDE_DIR "/usr/local/include")
-    set(GLFW3_LIBRARY "/usr/local/lib/libglfw.3.dylib")
-else ()
-    message(FATAL_ERROR "GLFW not found. Install with: brew install glfw")
-endif ()
-
-include_directories(${GLFW3_INCLUDE_DIR})
-
-# -----------------------------
-# GLEW
-# -----------------------------
-set(GLEW_INCLUDE_DIR "/opt/homebrew/include")
-set(GLEW_LIBRARY "/opt/homebrew/lib/libGLEW.dylib")
-
-include_directories(${GLEW_INCLUDE_DIR})
+find_package(glfw3 CONFIG REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 
 # -----------------------------
 # Executable
@@ -48,14 +32,20 @@ add_executable(OpenGL
         src/Texture.cpp
 )
 
-# -----------------------------
-# Link libraries and frameworks
-# -----------------------------
+#-------------------------------
+# Link Libraries
+#-------------------------------
 target_link_libraries(OpenGL
-        ${GLFW3_LIBRARY}
-        ${GLEW_LIBRARY}
-        "-framework OpenGL"
-        "-framework Cocoa"
-        "-framework IOKit"
-        "-framework CoreVideo"
+    PRIVATE
+        glfw
+        GLEW::GLEW
+        OpenGL::GL
+)
+
+#------------------------------
+# Set output directory
+#------------------------------
+
+set_target_properties(OpenGL PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
 )

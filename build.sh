@@ -2,12 +2,14 @@
 
 echo setting up make file using cmake...
 
-cmake -B .
+cmake -S . -B build
 
-cd cmake-build*
+cd build
 
 echo Compiling and executing gl code...
 
 make
+
+cd ../bin
 
 ./OpenGL
