@@ -7,7 +7,7 @@
 #include "include/IndexBuffer.hpp"
 #include "include/VertexArray.hpp"
 #include "include/Shader.hpp"
-#include "include/Texture.hpp"
+// #include "include/Texture.hpp"
 #include <string>
 
 
@@ -71,10 +71,10 @@ int main() {
   auto shader = Shader("../ressources/shaders/basic.vert");
   shader.bind();
 
-  const Texture texture("../ressources/textures/TechSupportLogo.png");
-  texture.bind();
+  float b = 0.3f;
+  float rate_of_change = 0.01f;
 
-  shader.set_uniform_1i("u_Texture", 0);
+  shader.set_uniform_4f("u_Color", 0.2f, 0.7f, b, 0.5f);
 
   vb.unbind();
   ib.unbind();
@@ -85,6 +85,16 @@ int main() {
 
   while (!glfwWindowShouldClose(window)) {
     shader.bind();
+    va.bind();
+    ib.bind();
+    b += rate_of_change;
+    if (b >= 1.0f){
+      rate_of_change *= -1;
+    }
+    else if (b <= 0.0f){
+      rate_of_change *= -1;
+    }
+    shader.set_uniform_4f("u_Color", 0.2f, 0.7f, b, 0.5f);
     renderer.clear();
     renderer.draw(va, ib, shader);
 
