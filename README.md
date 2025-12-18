@@ -12,10 +12,11 @@ taking a look at developing a game engine.
 **Build System**: CMake
 **External Libraries**:
 
-- OpenGl (For graphics rendering)
-- stb_image (For converting resources like images into a texture format)
-- GLEW (For recognizing which OpenGl functions the GPU allows)
-- GLFW (For creating windows on all operating systems, without explicitly accessing the OS API)
+- [OpenGl](https://github.com/McNopper/OpenGL.git) (For graphics rendering)
+- [stb_image](https://github.com/nothings/stb.git) (For converting resources like images into a texture format)
+- [GLEW](https://github.com/nigels-com/glew.git) (For recognizing which OpenGl functions the GPU allows)
+- [GLFW](https://github.com/glfw/glfw.git) (For creating windows on all operating systems, without explicitly accessing the OS API)
+- [glm](https://github.com/icaven/glm.git) (OpenGL Maths library)
 
 ### Set up
 

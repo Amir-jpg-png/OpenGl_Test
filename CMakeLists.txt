@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(OpenGLTest)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 # -----------------------------
 # required libraries
@@ -26,8 +26,8 @@ add_executable(OpenGL
         src/VertexArray.cpp
         src/Shader.cpp
         include/Shader.hpp
-        lib/stb_image.h
-        lib/stb_image.cpp
+        lib/stb_image/stb_image.h
+        lib/stb_image/stb_image.cpp
         include/Texture.hpp
         src/Texture.cpp
 )
@@ -36,7 +36,7 @@ add_executable(OpenGL
 # Link Libraries
 #-------------------------------
 target_link_libraries(OpenGL
-    PRIVATE
+        PRIVATE
         glfw
         GLEW::GLEW
         OpenGL::GL

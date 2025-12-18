@@ -9,12 +9,15 @@
 #include "include/Shader.hpp"
 #include "include/Texture.hpp"
 #include <string>
+#include "lib/glm/glm.hpp"
+#include "lib/glm/gtc/matrix_transform.hpp"
 
-
-int main() {
+int main()
+{
   GLFWwindow *window;
 
-  if (!glfwInit()) {
+  if (!glfwInit())
+  {
     std::cout << "Failed to init GLFW" << std::endl;
     return -1;
   }
@@ -28,8 +31,9 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-  window = glfwCreateWindow(900, 900, "OpenGL Shapes Window", nullptr, nullptr);
-  if (!window) {
+  window = glfwCreateWindow(960, 540, "OpenGL Shapes Window", nullptr, nullptr);
+  if (!window)
+  {
     glfwTerminate();
     return -1;
   }
@@ -37,7 +41,8 @@ int main() {
   glfwMakeContextCurrent(window);
 
   glfwSwapInterval(1);
-  if (glewInit() != GLEW_OK) {
+  if (glewInit() != GLEW_OK)
+  {
     std::cout << "Failed to initialize GLEW" << std::endl;
     return -1;
   }
@@ -45,15 +50,13 @@ int main() {
   std::cout << glGetString(GL_VERSION) << std::endl;
 
   float positions[] = {
-    -0.5f, -0.5f, 0.0f, 0.0f,
-    0.5f, -0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, 1.0f, 1.0f,
-    -0.5f, 0.5f, 0.0f, 1.0f
-  };
+      100.0f, 100.0f, 0.0f, 0.0f,
+      200.0f, 100.0f, 1.0f, 0.0f,
+      200.0f, 200.0f, 1.0f, 1.0f,
+      100.0f, 200.0f, 0.0f, 1.0f};
 
   unsigned int indices[] = {
-    0, 1, 2, 2, 3, 0
-  };
+      0, 1, 2, 2, 3, 0};
 
   GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
   GLCall(glEnable(GL_BLEND));
@@ -68,13 +71,17 @@ int main() {
 
   const IndexBuffer ib(indices, 6);
 
+  glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+  glm::vec4 pos(100.0f, 100.0f, 0.0f, 1.0f);
+  glm::vec4 res = proj * pos;
   auto shader = Shader("../ressources/shaders/basic.vert");
   shader.bind();
 
+  shader.set_uniform_1i("u_Texture", 0);
+  shader.set_uniform_mat_4f("u_MVP", proj);
+
   const Texture texture("../ressources/textures/TechSupportLogo.png");
   texture.bind();
-
-  shader.set_uniform_1i("u_Texture", 0);
 
   vb.unbind();
   ib.unbind();
@@ -83,7 +90,8 @@ int main() {
 
   const Renderer renderer;
 
-  while (!glfwWindowShouldClose(window)) {
+  while (!glfwWindowShouldClose(window))
+  {
     shader.bind();
     renderer.clear();
     renderer.draw(va, ib, shader);

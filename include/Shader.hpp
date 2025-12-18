@@ -2,6 +2,7 @@
 #define OPENGLTEST_SHADER_H
 #include <string>
 #include <unordered_map>
+#include "../lib/glm/glm.hpp"
 
 class Shader {
         std::string m_filepath;
@@ -20,6 +21,8 @@ public:
         void set_uniform_4f(const std::string &name, float v0, float v1, float v2, float v3);
 
         void set_uniform_1i(const std::string &name, int value);
+
+        void set_uniform_mat_4f(const std::string &name, const glm::mat4 &matrix);
 
 private:
         void parse_shader(std::string &vertex_source, std::string &fragment_source) const;

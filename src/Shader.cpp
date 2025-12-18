@@ -4,69 +4,86 @@
 #include <string>
 #include <sstream>
 #include <GL/glew.h>
+#include "../lib/glm/gtc/type_ptr.hpp"
 #include "../include/Renderer.hpp"
 
 Shader::Shader(const std::string &filepath)
-    : m_filepath(filepath) {
+    : m_filepath(filepath)
+{
     std::string vertex_source;
     std::string fragment_source;
     parse_shader(vertex_source, fragment_source);
     m_renderer_id = create_shader(vertex_source, fragment_source);
 }
 
-Shader::~Shader() {
+Shader::~Shader()
+{
     GLCall(glDeleteProgram(m_renderer_id));
 }
 
-void Shader::bind() const {
+void Shader::bind() const
+{
     GLCall(glUseProgram(m_renderer_id));
 }
 
-void Shader::unbind() const {
-    if (m_renderer_id != 0) {
+void Shader::unbind() const
+{
+    if (m_renderer_id != 0)
+    {
         GLCall(glUseProgram(0));
     }
 }
 
 void Shader::set_uniform_4f(const std::string &name, const float v0, const float v1, const float v2,
-                            const float v3) {
+                            const float v3)
+{
     GLCall(glUniform4f(get_and_cache_uniform_location(name), v0, v1, v2, v3));
 }
 
-int Shader::get_and_cache_uniform_location(const std::string &name) {
-    if (m_uniforms_cache.find(name) != m_uniforms_cache.end()) {
+int Shader::get_and_cache_uniform_location(const std::string &name)
+{
+    if (m_uniforms_cache.find(name) != m_uniforms_cache.end())
+    {
         return m_uniforms_cache.at(name);
     }
     GLCall(const int location = glGetUniformLocation(m_renderer_id, name.c_str()));
-    if (location == -1) {
+    if (location == -1)
+    {
         std::cout << "WARNING: Uniform " + name + " does not exist!" << std::endl;
-    } else {
+    }
+    else
+    {
         m_uniforms_cache[name] = location;
     }
     return location;
 }
 
-unsigned int Shader::compile_shader(const unsigned int type, const std::string &source) const {
+unsigned int Shader::compile_shader(const unsigned int type, const std::string &source) const
+{
     unsigned int id = glCreateShader(type);
     const char *src = source.c_str();
     GLCall(glShaderSource(id, 1, &src, nullptr));
     GLCall(glCompileShader(id));
 
-    if (get_compile_error(id, type) != nullptr) {
+    if (get_compile_error(id, type) != nullptr)
+    {
         exit(-1);
     }
     return id;
 }
 
-void Shader::parse_shader(std::string &vertex_source, std::string &fragment_source) const {
-    enum shader_type {
+void Shader::parse_shader(std::string &vertex_source, std::string &fragment_source) const
+{
+    enum shader_type
+    {
         NONE = -1,
         VERTEX = 0,
         FRAGMENT = 1
     };
 
     std::ifstream stream(m_filepath);
-    if (!stream.is_open()) {
+    if (!stream.is_open())
+    {
         std::cerr << "ERROR: Could not open shader file: " << m_filepath << "\n";
         exit(-1);
     }
@@ -74,16 +91,25 @@ void Shader::parse_shader(std::string &vertex_source, std::string &fragment_sour
     std::stringstream ss[2];
     shader_type mode = NONE;
 
-    while (std::getline(stream, line)) {
-        if (line.find("#shader") != std::string::npos) {
-            if (line.find("vertex") != std::string::npos) {
+    while (std::getline(stream, line))
+    {
+        if (line.find("#shader") != std::string::npos)
+        {
+            if (line.find("vertex") != std::string::npos)
+            {
                 mode = VERTEX;
-            } else if (line.find("fragment") != std::string::npos) {
+            }
+            else if (line.find("fragment") != std::string::npos)
+            {
                 mode = FRAGMENT;
             }
-        } else if (mode != NONE) {
+        }
+        else if (mode != NONE)
+        {
             ss[mode] << line << "\n";
-        } else {
+        }
+        else
+        {
             std::cerr << "No line #shader. Neither vertex nor fragment shader" << std::endl;
             exit(-1);
         }
@@ -92,7 +118,8 @@ void Shader::parse_shader(std::string &vertex_source, std::string &fragment_sour
     fragment_source = ss[FRAGMENT].str();
 }
 
-unsigned int Shader::create_shader(const std::string &vertex_shader, const std::string &fragment_shader) const {
+unsigned int Shader::create_shader(const std::string &vertex_shader, const std::string &fragment_shader) const
+{
     const unsigned int program = glCreateProgram();
     const unsigned int vs = compile_shader(GL_VERTEX_SHADER, vertex_shader);
     const unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, fragment_shader);
@@ -108,7 +135,12 @@ unsigned int Shader::create_shader(const std::string &vertex_shader, const std::
     return program;
 }
 
-void Shader::set_uniform_1i(const std::string &name, int value) {
+void Shader::set_uniform_1i(const std::string &name, int value)
+{
     GLCall(glUniform1i(get_and_cache_uniform_location(name), value));
 }
 
+void Shader::set_uniform_mat_4f(const std::string &name, const glm::mat4 &matrix)
+{
+    GLCall(glUniformMatrix4fv(get_and_cache_uniform_location(name), 1, GL_FALSE, glm::value_ptr(matrix)));
+}
