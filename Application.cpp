@@ -11,6 +11,9 @@
 #include <string>
 #include "lib/glm/glm.hpp"
 #include "lib/glm/gtc/matrix_transform.hpp"
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_glfw.h"
+#include "lib/imgui/imgui_impl_opengl3.h"
 
 int main()
 {
@@ -72,13 +75,14 @@ int main()
   const IndexBuffer ib(indices, 6);
 
   glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-  glm::vec4 pos(100.0f, 100.0f, 0.0f, 1.0f);
-  glm::vec4 res = proj * pos;
+  glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
+  glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+  glm::mat4 mvp = proj * view * model;
   auto shader = Shader("../ressources/shaders/basic.vert");
   shader.bind();
 
   shader.set_uniform_1i("u_Texture", 0);
-  shader.set_uniform_mat_4f("u_MVP", proj);
+  shader.set_uniform_mat_4f("u_MVP", mvp);
 
   const Texture texture("../ressources/textures/TechSupportLogo.png");
   texture.bind();
@@ -90,15 +94,58 @@ int main()
 
   const Renderer renderer;
 
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplOpenGL3_Init("#version 150");
+  ImGui::StyleColorsDark();
+
+  bool show_demo_window = true;
+  bool show_another_window = false;
+  ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
   while (!glfwWindowShouldClose(window))
   {
-    shader.bind();
     renderer.clear();
+
+    ImGui_ImplGlfw_NewFrame();
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui::NewFrame();
+
     renderer.draw(va, ib, shader);
+
+    {
+      static float f = 0.0f;
+      static int counter = 0;
+
+      ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
+
+      ImGui::Text("This is some useful text.");          // Display some text (you can use a format strings too)
+      ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
+      ImGui::Checkbox("Another Window", &show_another_window);
+
+      ImGui::SliderFloat("float", &f, 0.0f, 1.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
+      ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
+
+      if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
+        counter++;
+      ImGui::SameLine();
+      ImGui::Text("counter = %d", counter);
+
+      ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+      ImGui::End();
+    }
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
+
+  ImGui_ImplGlfw_Shutdown();
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui::DestroyContext();
 
   glfwTerminate();
   return 0;

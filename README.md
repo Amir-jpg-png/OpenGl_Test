@@ -17,6 +17,7 @@ taking a look at developing a game engine.
 - [GLEW](https://github.com/nigels-com/glew.git) (For recognizing which OpenGl functions the GPU allows)
 - [GLFW](https://github.com/glfw/glfw.git) (For creating windows on all operating systems, without explicitly accessing the OS API)
 - [glm](https://github.com/icaven/glm.git) (OpenGL Maths library)
+- [ImGui](https://github.com/ocornut/imgui.git) (GUI Library for debugging)
 
 ### Set up
 
@@ -29,5 +30,5 @@ git clone https://github.com/Amir-jpg-png/OpenGl_Test.git
 Afterwards you can build and run the project like this
 
 ```bash
-./build
+./build.sh
 ```

@@ -13,7 +13,8 @@ find_package(GLEW REQUIRED)
 # -----------------------------
 # Executable
 # -----------------------------
-add_executable(OpenGL
+add_executable(
+        OpenGL
         Application.cpp
         include/Renderer.hpp
         include/VertexBuffer.hpp
@@ -30,6 +31,15 @@ add_executable(OpenGL
         lib/stb_image/stb_image.cpp
         include/Texture.hpp
         src/Texture.cpp
+        lib/imgui/imgui.h
+        lib/imgui/imgui.cpp
+        lib/imgui/imgui_draw.cpp
+        lib/imgui/imgui_tables.cpp
+        lib/imgui/imgui_widgets.cpp
+        lib/imgui/imgui_impl_glfw.h
+        lib/imgui/imgui_impl_glfw.cpp
+        lib/imgui/imgui_impl_opengl3.h
+        lib/imgui/imgui_impl_opengl3.cpp
 )
 
 #-------------------------------
