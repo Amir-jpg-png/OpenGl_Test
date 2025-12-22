@@ -40,6 +40,9 @@ add_executable(
         lib/imgui/imgui_impl_glfw.cpp
         lib/imgui/imgui_impl_opengl3.h
         lib/imgui/imgui_impl_opengl3.cpp
+        tests/test.h
+        tests/TestClearColor.cpp
+        tests/TestClearColor.h
 )
 
 #-------------------------------

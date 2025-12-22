@@ -17,3 +17,4 @@ Makefile
 OpenGL
 cmake_install.cmake
 build/
+bin/
