@@ -41,8 +41,11 @@ add_executable(
         lib/imgui/imgui_impl_opengl3.h
         lib/imgui/imgui_impl_opengl3.cpp
         tests/test.h
-        tests/TestClearColor.cpp
-        tests/TestClearColor.h
+        tests/ClearColor/TestClearColor.cpp
+        tests/ClearColor/TestClearColor.h
+        tests/test.cpp
+        tests/Texture/TestTexture.h
+        tests/Texture/TestTexture.cpp
 )
 
 #-------------------------------

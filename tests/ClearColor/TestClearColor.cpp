@@ -1,6 +1,4 @@
 #include "TestClearColor.h"
-#include "../include/Renderer.hpp"
-#include "../lib/imgui/imgui.h"
 #include <iostream>
 
 namespace test
@@ -19,7 +17,9 @@ namespace test
 
     void TestClearColor::on_update(float deltaTime)
     {
-        // No update logic needed for this test
+        const auto &renderer = Renderer::get();
+        glm::vec4 clear_colors(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+        renderer.set_clear_color(clear_colors);
     }
 
     TestClearColor::~TestClearColor() = default;

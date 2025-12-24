@@ -40,7 +40,7 @@ void Shader::set_uniform_4f(const std::string &name, const float v0, const float
     GLCall(glUniform4f(get_and_cache_uniform_location(name), v0, v1, v2, v3));
 }
 
-int Shader::get_and_cache_uniform_location(const std::string &name)
+int Shader::get_and_cache_uniform_location(const std::string &name) const
 {
     if (m_uniforms_cache.find(name) != m_uniforms_cache.end())
     {

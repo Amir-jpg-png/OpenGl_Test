@@ -4,10 +4,11 @@
 #include <unordered_map>
 #include "../lib/glm/glm.hpp"
 
-class Shader {
+class Shader
+{
         std::string m_filepath;
         unsigned int m_renderer_id = 0;
-        std::unordered_map<std::string, int> m_uniforms_cache;
+        mutable std::unordered_map<std::string, int> m_uniforms_cache;
 
 public:
         explicit Shader(const std::string &filepath);
@@ -31,7 +32,7 @@ private:
 
         unsigned int create_shader(const std::string &vertex_shader, const std::string &fragment_shader) const;
 
-        int get_and_cache_uniform_location(const std::string &name);
+        int get_and_cache_uniform_location(const std::string &name) const;
 };
 
-#endif //OPENGLTEST_SHADER_H
+#endif // OPENGLTEST_SHADER_H
